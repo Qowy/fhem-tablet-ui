@@ -61,6 +61,7 @@ var Modul_simplechart = function () {
         var caption = elem.data('caption');
         var noticks = (elem.data('width') <= 100) ? true : elem.hasClass('noticks');
         var days = parseFloat(elem.attr('data-daysago') || 0);
+        var endnow = elem.data('endplotnow');
         var now = new Date();
         var ago = new Date();
         var vals = [];
@@ -74,8 +75,14 @@ var Modul_simplechart = function () {
             mindate = ago.yyyymmdd() + '_00:00:00';
         }
         //var maxdate= now.yyyymmdd() + '_23:59:59';
-        maxdate.setDate(now.getDate() + 1);
-        maxdate = maxdate.yyyymmdd() + '_00:00:00';
+        if (!endnow) {
+            maxdate.setDate(now.getDate() + 1);
+            maxdate = maxdate.yyyymmdd() + '_00:00:00';
+        }
+        else {
+            var nextmin = new Date(maxdate.getTime() + (60 * 1000));
+            maxdate = nextmin.yyyymmdd() + '_' + nextmin.hhmm() + ':00';
+        }        
 
         //console.log( "mindate: " + mindate);
         //console.log( "maxdate: " + maxdate);
