@@ -70,6 +70,14 @@ var Modul_simplechart = function () {
         if (days > 0 && days < 1) {
             ago.setTime(now.getTime() - (days * 24 * 60 * 60 * 1000));
             mindate = ago.yyyymmdd() + '_' + ago.hhmmss();
+        } else if (endnow) {
+            ago.setDate(now.getDate() - days);
+            //align to hours if span is larger than 12h
+            if (days > 0.5) {
+                mindate = ago.yyyymmdd() + '_' + ago.getHours() + ':00:00';
+            } else {
+                mindate = ago.yyyymmdd() + '_' + ago.hhmm() + ':00';
+            }
         } else {
             ago.setDate(now.getDate() - days);
             mindate = ago.yyyymmdd() + '_00:00:00';
@@ -79,10 +87,13 @@ var Modul_simplechart = function () {
             maxdate.setDate(now.getDate() + 1);
             maxdate = maxdate.yyyymmdd() + '_00:00:00';
         }
-        else {
-            var nextmin = new Date(maxdate.getTime() + (60 * 1000));
+        else if (days > 0.5) {
+            maxdate.setHours(maxdate.getHours() + 1);
+            maxdate = maxdate.yyyymmdd() + '_' + maxdate.getHours() + ':00:00';
+        } else {
+            maxdate.setMinutes(maxdate.getMinutes() + 1);
             maxdate = nextmin.yyyymmdd() + '_' + nextmin.hhmm() + ':00';
-        }        
+        }
 
         //console.log( "mindate: " + mindate);
         //console.log( "maxdate: " + maxdate);
